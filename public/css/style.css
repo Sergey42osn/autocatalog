@@ -1,0 +1,11 @@
+.box_table {
+    display: flex;
+    justify-content: center;
+}
+table {
+    width: 100%;
+}
+input {
+    border: none;
+    background: transparent;
+}
