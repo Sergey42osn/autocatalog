@@ -17,16 +17,31 @@
                                 v-model="details[i]"
                                 v-on:change="OnChangDetail($event,i)">
                                 <td width="12%">
-                                    <input @input="detail.code = $event.target.value" type="text" name="code" v-bind:value="detail.code" v-bind:data-id="detail.id" >
+                                    <input @input="detail.code = $event.target.value"
+                                            type="text"
+                                            name="code"
+                                            v-bind:value="detail.code"
+                                            v-bind:data-id="detail.id">
                                 </td>
                                 <td>
-                                    <input type="text" name="name" v-bind:value="detail.name">
+                                    <input @input="detail.name = $event.target.value"
+                                            type="text" name="name"
+                                            v-bind:value="detail.name"
+                                            v-bind:data-id="detail.id">
                                 </td>
                                 <td width="12%">
-                                    <input type="text" name="price_new" v-bind:value="detail.price_new">
+                                    <input @input="detail.price_new = $event.target.value"
+                                            type="text"
+                                            name="price_new"
+                                            v-bind:value="detail.price_new"
+                                            v-bind:data-id="detail.id">
                                 </td>
                                 <td width="12%">
-                                    <input type="text" name="price_old" v-bind:value="detail.price_old">
+                                    <input @input="detail.price_old = $event.target.value"
+                                            type="text"
+                                            name="price_old"
+                                            v-bind:value="detail.price_old"
+                                            v-bind:data-id="detail.id">
                                 </td>
                             </tr>
                         </tbody>
@@ -48,11 +63,7 @@
                     name: "",
                     price_new: "",
                     price_old: ""
-                },
-                code: "",
-                    name: "",
-                    price_new: "",
-                    price_old: ""
+                }
             }
         },
         mounted() {
@@ -72,23 +83,29 @@
         },
         methods:{
             OnChangDetail:function(e,i){
-                console.log(i);
+                //console.log(i);
 
                 console.log(this.details[i]);
                 let id = e.target.dataset.id;
-               // let ;
+                let data = {
+                    code: this.details[i].code,
+                    name: this.details[i].name,
+                    price_new: this.details[i].price_new,
+                    price_old: this.details[i].price_old
+                };
+
               let isSave = confirm("Вы внесли изменения сохронить?");
               if (isSave) {
 
-                saveDetail();
+                saveDetail(id,data);
               }
             }
         }
     }
-    function saveDetail(){
-        //console.log("ok");
+    function saveDetail(id,data){
+        console.log(data);
         axios
-            .put('/api/v1/details/${id}')
+            .put('/api/v1/details/'+id,data)
             .then(function (resp) {
                   // app.details = resp.data;                  
                     console.log(resp.data);

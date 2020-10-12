@@ -70,10 +70,12 @@ class DetailController extends Controller
      */
     public function update(Request $request, $id)
     {
+       //dd($id);
         $detail = Detail::findOrFail($id);
+        //dd($detail);
         $detail->update($request->all());
  
-        return $company;
+        return $detail;
     }
 
     /**

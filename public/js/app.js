@@ -1973,6 +1973,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "home",
   data: function data() {
@@ -1983,11 +1998,7 @@ __webpack_require__.r(__webpack_exports__);
         name: "",
         price_new: "",
         price_old: ""
-      },
-      code: "",
-      name: "",
-      price_new: "",
-      price_old: ""
+      }
     };
   },
   mounted: function mounted() {
@@ -2003,22 +2014,27 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     OnChangDetail: function OnChangDetail(e, i) {
-      console.log(i);
+      //console.log(i);
       console.log(this.details[i]);
-      var id = e.target.dataset.id; // let ;
-
+      var id = e.target.dataset.id;
+      var data = {
+        code: this.details[i].code,
+        name: this.details[i].name,
+        price_new: this.details[i].price_new,
+        price_old: this.details[i].price_old
+      };
       var isSave = confirm("Вы внесли изменения сохронить?");
 
       if (isSave) {
-        saveDetail();
+        saveDetail(id, data);
       }
     }
   }
 });
 
-function saveDetail() {
-  //console.log("ok");
-  axios.put('/api/v1/details/${id}').then(function (resp) {
+function saveDetail(id, data) {
+  console.log(data);
+  axios.put('/api/v1/details/' + id, data).then(function (resp) {
     // app.details = resp.data;                  
     console.log(resp.data);
   })["catch"](function (resp) {
@@ -37689,22 +37705,49 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [
                         _c("input", {
-                          attrs: { type: "text", name: "name" },
-                          domProps: { value: detail.name }
+                          attrs: {
+                            type: "text",
+                            name: "name",
+                            "data-id": detail.id
+                          },
+                          domProps: { value: detail.name },
+                          on: {
+                            input: function($event) {
+                              detail.name = $event.target.value
+                            }
+                          }
                         })
                       ]),
                       _vm._v(" "),
                       _c("td", { attrs: { width: "12%" } }, [
                         _c("input", {
-                          attrs: { type: "text", name: "price_new" },
-                          domProps: { value: detail.price_new }
+                          attrs: {
+                            type: "text",
+                            name: "price_new",
+                            "data-id": detail.id
+                          },
+                          domProps: { value: detail.price_new },
+                          on: {
+                            input: function($event) {
+                              detail.price_new = $event.target.value
+                            }
+                          }
                         })
                       ]),
                       _vm._v(" "),
                       _c("td", { attrs: { width: "12%" } }, [
                         _c("input", {
-                          attrs: { type: "text", name: "price_old" },
-                          domProps: { value: detail.price_old }
+                          attrs: {
+                            type: "text",
+                            name: "price_old",
+                            "data-id": detail.id
+                          },
+                          domProps: { value: detail.price_old },
+                          on: {
+                            input: function($event) {
+                              detail.price_old = $event.target.value
+                            }
+                          }
                         })
                       ])
                     ]
