@@ -1963,11 +1963,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "home",
   data: function data() {
     return {
-      details: []
+      details: [],
+      detail: {
+        code: "",
+        name: "",
+        price_new: "",
+        price_old: ""
+      },
+      code: "",
+      name: "",
+      price_new: "",
+      price_old: ""
     };
   },
   mounted: function mounted() {
@@ -1980,8 +2000,31 @@ __webpack_require__.r(__webpack_exports__);
       console.log(resp);
       alert("Could not load companies");
     });
+  },
+  methods: {
+    OnChangDetail: function OnChangDetail(e, i) {
+      console.log(i);
+      console.log(this.details[i]);
+      var id = e.target.dataset.id; // let ;
+
+      var isSave = confirm("Вы внесли изменения сохронить?");
+
+      if (isSave) {
+        saveDetail();
+      }
+    }
   }
 });
+
+function saveDetail() {
+  //console.log("ok");
+  axios.put('/api/v1/details/${id}').then(function (resp) {
+    // app.details = resp.data;                  
+    console.log(resp.data);
+  })["catch"](function (resp) {
+    console.log(resp);
+  });
+}
 
 /***/ }),
 
@@ -37608,23 +37651,64 @@ var render = function() {
               [
                 _vm._m(0),
                 _vm._v(" "),
-                _vm._l(_vm.details, function(detail, index) {
-                  return _c("tr", [
-                    _c("td", [
-                      _c("input", {
-                        attrs: { type: "text" },
-                        domProps: { value: detail.code }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(detail.name))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(detail.price_new))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(detail.website))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(detail.price_old))])
-                  ])
+                _vm._l(_vm.details, function(detail, i) {
+                  return _c(
+                    "tr",
+                    {
+                      key: detail.id,
+                      attrs: { "data-id": detail.id },
+                      on: {
+                        change: function($event) {
+                          return _vm.OnChangDetail($event, i)
+                        }
+                      },
+                      model: {
+                        value: _vm.details[i],
+                        callback: function($$v) {
+                          _vm.$set(_vm.details, i, $$v)
+                        },
+                        expression: "details[i]"
+                      }
+                    },
+                    [
+                      _c("td", { attrs: { width: "12%" } }, [
+                        _c("input", {
+                          attrs: {
+                            type: "text",
+                            name: "code",
+                            "data-id": detail.id
+                          },
+                          domProps: { value: detail.code },
+                          on: {
+                            input: function($event) {
+                              detail.code = $event.target.value
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("input", {
+                          attrs: { type: "text", name: "name" },
+                          domProps: { value: detail.name }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { attrs: { width: "12%" } }, [
+                        _c("input", {
+                          attrs: { type: "text", name: "price_new" },
+                          domProps: { value: detail.price_new }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { attrs: { width: "12%" } }, [
+                        _c("input", {
+                          attrs: { type: "text", name: "price_old" },
+                          domProps: { value: detail.price_old }
+                        })
+                      ])
+                    ]
+                  )
                 })
               ],
               2
@@ -53162,8 +53246,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Сайт\OSP\OpenServer\domains\autocatalog\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\Сайт\OSP\OpenServer\domains\autocatalog\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\Программы\OpenServer\domains\autocatalog\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Программы\OpenServer\domains\autocatalog\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -4,8 +4,10 @@
 }
 table {
     width: 100%;
+
 }
 input {
     border: none;
     background: transparent;
+    width: 100%;
 }
