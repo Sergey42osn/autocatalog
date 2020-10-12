@@ -94,11 +94,7 @@
                     price_old: this.details[i].price_old
                 };
 
-              let isSave = confirm("Вы внесли изменения сохронить?");
-              if (isSave) {
-
                 saveDetail(id,data);
-              }
             }
         }
     }

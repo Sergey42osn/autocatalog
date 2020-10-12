@@ -2023,11 +2023,7 @@ __webpack_require__.r(__webpack_exports__);
         price_new: this.details[i].price_new,
         price_old: this.details[i].price_old
       };
-      var isSave = confirm("Вы внесли изменения сохронить?");
-
-      if (isSave) {
-        saveDetail(id, data);
-      }
+      saveDetail(id, data);
     }
   }
 });
