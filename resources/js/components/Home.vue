@@ -1,5 +1,17 @@
 <template>
     <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="header">
+                    <div class="header_h1">
+                        <h1>Каталог запчастей</h1>
+                    </div>
+                    <div class="header_batton">
+                        <router-link :to="{name: 'addprice'}">Загрузить прайс</router-link>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-center">
             <div class="col-sm-12">
                 <div class="box_table">
