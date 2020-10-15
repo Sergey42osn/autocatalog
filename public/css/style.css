@@ -37,3 +37,6 @@ input {
     padding: 5px 10px;
     color: #000000;
 }
+.box_form.home_box_form {
+    margin-bottom: 25px;
+}

@@ -14,6 +14,11 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-sm-12">
+                <CatalogModel></CatalogModel>
+            </div>
+        </div> 
+        <div class="row justify-content-center">
+            <div class="col-sm-12">
                 <div class="box_table">
                     <table border="1">
                         <tbody>
@@ -65,7 +70,12 @@
 </template>
 
 <script>
+    import CatalogModel from './CatalogModel.vue'
+
     export default {
+        components: {
+            'CatalogModel': CatalogModel
+          },
         name:"home",
         data() {
             return {
