@@ -8,19 +8,26 @@
                     </div>
                     <div class="box_form_content">
                          <form action="">
-                            <select v-model="selected"
-                                    v-on:change="OnChangBrand($event)">
-                              <option v-for="brand,i in brands"
-                                        v-bind:value="brand.id">
-                                {{ brand.name }}
-                              </option>
-                            </select>
-                            <select v-model="selected_m">
-                              <option v-for="model,j in models"
-                                        v-bind:value="model.id">
-                                {{ model.name }}
-                              </option>
-                            </select>
+                            <div class="form_content_box_select">
+                               <select v-model="selected"
+                                        v-on:change="OnChangBrand($event)">
+                                  <option v-for="brand,i in brands"
+                                            v-bind:value="brand.id">
+                                    {{ brand.name }}
+                                  </option>
+                                </select>
+                                <a href="#" :data-auto="selected" @click="addAuto">Добавить авто</a>
+                            </div>
+                            <div class="form_content_box_select">
+                               <select v-model="selected_m">
+                                  <option v-for="model,j in models"
+                                            v-bind:value="model.id">
+                                    {{ model.name }}
+                                  </option>
+                                </select>
+                                <a href="#" @click="addModel"
+                                            :data-model="selected_m">Добавить модель</a> 
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -61,27 +68,45 @@
             // OnChangBrand(this.selected,app);
         },
         methods:{
-            OnChangBrand:function(e){
+            OnChangBrand(e){
+                console.log(e);
                console.log(this.selected); 
-               getModelId(this.selected,this.app);
+               let id = this.selected;
+               var app = this;
+               axios
+                    .get('/api/v1/models/' + id)
+                    .then(function (resp) {
+                    console.log(resp.data[0].id);
+                        app.models = resp.data;
+                       app.selected_m = resp.data[0].id;
+                       // app.modelselect = true;
+
+                    })
+                    .catch(function (resp) {
+                        console.log(resp);
+                        alert("Could not load models");
+                    });
+                   // this.selected = this.brands[1].name;
+                console.log('Get models.');
+            },
+            addAuto(){
+
+            },
+            addModel(){
+
             }
          }
     }
-        function OnChangBrand(id,app){
-            console.log(id);
-            getModelId(id,app);
-        }
         function getModelId(id,app){
             //var app = this;
             axios
             .get('/api/v1/models/' + id)
                 .then(function (resp) {
-                    console.log(resp.data);
+                    console.log(resp.data[0].id);
                     app.models = resp.data;
-                  // app.selected_m = 1;
+                   app.selected_m = resp.data[0].id;
                    // app.modelselect = true;
-                  
-                    console.log(resp.data);
+
                 })
                 .catch(function (resp) {
                     console.log(resp);

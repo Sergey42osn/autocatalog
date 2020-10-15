@@ -21,3 +21,19 @@ input {
     padding: 10px 20px;
     color: #fff;
 }
+.box_form_content {
+    display: flex;
+}
+.box_form_content form {
+    display: flex;
+}
+.form_content_box_select {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+}
+.form_content_box_select a {
+    background: #3e3e3e3e;
+    padding: 5px 10px;
+    color: #000000;
+}

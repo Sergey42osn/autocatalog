@@ -2093,6 +2093,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "addprice",
   data: function data() {
@@ -2120,25 +2127,32 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     OnChangBrand: function OnChangBrand(e) {
+      console.log(e);
       console.log(this.selected);
-      getModelId(this.selected, this.app);
-    }
+      var id = this.selected;
+      var app = this;
+      axios.get('/api/v1/models/' + id).then(function (resp) {
+        console.log(resp.data[0].id);
+        app.models = resp.data;
+        app.selected_m = resp.data[0].id; // app.modelselect = true;
+      })["catch"](function (resp) {
+        console.log(resp);
+        alert("Could not load models");
+      }); // this.selected = this.brands[1].name;
+
+      console.log('Get models.');
+    },
+    addAuto: function addAuto() {},
+    addModel: function addModel() {}
   }
 });
-
-function OnChangBrand(id, app) {
-  console.log(id);
-  getModelId(id, app);
-}
 
 function getModelId(id, app) {
   //var app = this;
   axios.get('/api/v1/models/' + id).then(function (resp) {
-    console.log(resp.data);
-    app.models = resp.data; // app.selected_m = 1;
-    // app.modelselect = true;
-
-    console.log(resp.data);
+    console.log(resp.data[0].id);
+    app.models = resp.data;
+    app.selected_m = resp.data[0].id; // app.modelselect = true;
   })["catch"](function (resp) {
     console.log(resp);
     alert("Could not load models");
@@ -37939,20 +37953,75 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "box_form_content" }, [
             _c("form", { attrs: { action: "" } }, [
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.selected,
-                      expression: "selected"
+              _c("div", { staticClass: "form_content_box_select" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.selected,
+                        expression: "selected"
+                      }
+                    ],
+                    on: {
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.selected = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        },
+                        function($event) {
+                          return _vm.OnChangBrand($event)
+                        }
+                      ]
                     }
-                  ],
-                  on: {
-                    change: [
-                      function($event) {
+                  },
+                  _vm._l(_vm.brands, function(brand, i) {
+                    return _c("option", { domProps: { value: brand.id } }, [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(brand.name) +
+                          "\n                              "
+                      )
+                    ])
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "#", "data-auto": _vm.selected },
+                    on: { click: _vm.addAuto }
+                  },
+                  [_vm._v("Добавить авто")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form_content_box_select" }, [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.selected_m,
+                        expression: "selected_m"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
                         var $$selectedVal = Array.prototype.filter
                           .call($event.target.options, function(o) {
                             return o.selected
@@ -37961,66 +38030,33 @@ var render = function() {
                             var val = "_value" in o ? o._value : o.value
                             return val
                           })
-                        _vm.selected = $event.target.multiple
+                        _vm.selected_m = $event.target.multiple
                           ? $$selectedVal
                           : $$selectedVal[0]
-                      },
-                      function($event) {
-                        return _vm.OnChangBrand($event)
                       }
-                    ]
-                  }
-                },
-                _vm._l(_vm.brands, function(brand, i) {
-                  return _c("option", { domProps: { value: brand.id } }, [
-                    _vm._v(
-                      "\n                            " +
-                        _vm._s(brand.name) +
-                        "\n                          "
-                    )
-                  ])
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.selected_m,
-                      expression: "selected_m"
                     }
-                  ],
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.selected_m = $event.target.multiple
-                        ? $$selectedVal
-                        : $$selectedVal[0]
-                    }
-                  }
-                },
-                _vm._l(_vm.models, function(model, j) {
-                  return _c("option", { domProps: { value: model.id } }, [
-                    _vm._v(
-                      "\n                            " +
-                        _vm._s(model.name) +
-                        "\n                          "
-                    )
-                  ])
-                }),
-                0
-              )
+                  },
+                  _vm._l(_vm.models, function(model, j) {
+                    return _c("option", { domProps: { value: model.id } }, [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(model.name) +
+                          "\n                              "
+                      )
+                    ])
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    attrs: { href: "#", "data-model": _vm.selected_m },
+                    on: { click: _vm.addModel }
+                  },
+                  [_vm._v("Добавить модель")]
+                )
+              ])
             ])
           ])
         ])
