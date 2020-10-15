@@ -14,12 +14,12 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-sm-12">
-                <CatalogModel></CatalogModel>
+                <CatalogModel @CatalogShow="CatalogShow"></CatalogModel>
             </div>
         </div> 
         <div class="row justify-content-center">
             <div class="col-sm-12">
-                <div class="box_table">
+                <div v-if="catalog == 'show'" class="box_table">
                     <table border="1">
                         <tbody>
                             <tr>
@@ -76,9 +76,16 @@
         components: {
             'CatalogModel': CatalogModel
           },
+          props:{
+            brand: "",
+            model: ""
+          },
         name:"home",
         data() {
             return {
+                selected: "",
+                selected_m: "",
+                catalog: 'hide',
                 details: [],
                 detail: {
                     code: "",
@@ -89,25 +96,32 @@
             }
         },
         mounted() {
-            console.log('Home mounted.')
+            console.log('Home mounted.');
+
             var app = this;
+            //console.log(app.selected);
+
             axios.get('/api/v1/details')
                 .then(function (resp) {
 
                     app.details = resp.data;
                   
-                    console.log(resp.data);
+                    //console.log(resp.data);
                 })
                 .catch(function (resp) {
                     console.log(resp);
-                    alert("Could not load companies");
+                    alert("Could not load details");
                 });
         },
         methods:{
+            CatalogShow(data){
+                this.catalog = 'show';
+                 console.log('child component said login', data);
+            },
             OnChangDetail:function(e,i){
                 //console.log(i);
 
-                console.log(this.details[i]);
+               // console.log(this.details[i]);
                 let id = e.target.dataset.id;
                 let data = {
                     code: this.details[i].code,
@@ -121,7 +135,7 @@
         }
     }
     function saveDetail(id,data){
-        console.log(data);
+        //console.log(data);
         axios
             .put('/api/v1/details/'+id,data)
             .then(function (resp) {

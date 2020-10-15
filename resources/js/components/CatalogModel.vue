@@ -18,7 +18,8 @@
                                 </select>
                             </div>
                             <div class="form_content_box_select">
-                               <select v-model="selected_m">
+                               <select v-model="selected_m"
+                                        v-on:change="OnChangModel($event)">
                                   <option v-for="model,j in models"
                                             v-bind:value="model.id">
                                     {{ model.name }}
@@ -34,11 +35,12 @@
 </template>
 
 <script>
+
     export default {
-        name:"CatalogModel",
+        name: "CatalogModel",
         data() {
             return {
-                selected: "1",
+                selected: 1,
                 selected_m: 0,
                 modelselect: false,
                 brands: [],
@@ -56,41 +58,61 @@
                     //getModelId(app.brands[0].id,app);
                 })
                 .catch(function (resp) {
-                    console.log(resp);
+                   // console.log(resp);
                     alert("Could not load companies");
                 });
-            console.log('Home mounted.');
+           // console.log('Home mounted.');
             //console.log(this.selected);
             getModelId(this.selected,app);
             // OnChangBrand(this.selected,app);
         },
         methods:{
             OnChangBrand(e){
-                console.log(e);
-               console.log(this.selected); 
+               // console.log(e);
+              // console.log(this.selected); 
                let id = this.selected;
                var app = this;
+                //console.log(app.selected);
                axios
                     .get('/api/v1/models/' + id)
                     .then(function (resp) {
-                    console.log(resp.data[0].id);
-                        app.models = resp.data;
-                       app.selected_m = resp.data[0].id;
+                    //console.log(resp.data[0].id);
+                    app.models = resp.data;
+                    app.selected_m = resp.data[0].id;
                        // app.modelselect = true;
 
-                    })
-                    .catch(function (resp) {
-                        console.log(resp);
-                        alert("Could not load models");
-                    });
-                   // this.selected = this.brands[1].name;
-                console.log('Get models.');
-            },
-            addAuto(){
+                })
+                .catch(function (resp) {
+                   // console.log(resp);
+                    alert("Could not load models");
+                });
 
+                 var data = {
+                    brand: this.selected,
+                    model: this.selected_m
+                };
+               // console.log(this.selected);
+               this.$emit('CatalogShow',data);
+                //console.log('Get models.');
             },
-            addModel(){
-
+            OnChangModel(e){
+                //console.log(e);
+                var app = this;
+                //console.log(app.selected_m);
+                var data = {
+                    brand: this.selected,
+                    model: this.selected_m
+                };
+                //console.log(this.selected);
+               this.$emit('CatalogShow',data);
+            },
+             CatalogShow(){
+                var data = {
+                    brand: this.selected,
+                    model: this.selected_m
+                };
+               // console.log(this.selected);
+               this.$emit('CatalogShow',data); 
             }
          }
     }
@@ -99,14 +121,17 @@
             axios
             .get('/api/v1/models/' + id)
                 .then(function (resp) {
-                    console.log(resp.data[0].id);
+
                     app.models = resp.data;
                    app.selected_m = resp.data[0].id;
                    // app.modelselect = true;
+                   // console.log(app.selected);
+                     //console.log(app.selected_m);
+                     app.CatalogShow();
 
                 })
                 .catch(function (resp) {
-                    console.log(resp);
+                   // console.log(resp);
                     alert("Could not load models");
                 });
                // this.selected = this.brands[1].name;

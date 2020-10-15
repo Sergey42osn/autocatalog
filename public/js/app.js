@@ -1970,11 +1970,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CatalogModel",
   data: function data() {
     return {
-      selected: "1",
+      selected: 1,
       selected_m: 0,
       modelselect: false,
       brands: [],
@@ -1988,43 +1989,68 @@ __webpack_require__.r(__webpack_exports__);
       app.brands = resp.data; //console.log(resp.data);
       //getModelId(app.brands[0].id,app);
     })["catch"](function (resp) {
-      console.log(resp);
+      // console.log(resp);
       alert("Could not load companies");
-    });
-    console.log('Home mounted.'); //console.log(this.selected);
+    }); // console.log('Home mounted.');
+    //console.log(this.selected);
 
     getModelId(this.selected, app); // OnChangBrand(this.selected,app);
   },
   methods: {
     OnChangBrand: function OnChangBrand(e) {
-      console.log(e);
-      console.log(this.selected);
+      // console.log(e);
+      // console.log(this.selected); 
       var id = this.selected;
-      var app = this;
+      var app = this; //console.log(app.selected);
+
       axios.get('/api/v1/models/' + id).then(function (resp) {
-        console.log(resp.data[0].id);
+        //console.log(resp.data[0].id);
         app.models = resp.data;
         app.selected_m = resp.data[0].id; // app.modelselect = true;
       })["catch"](function (resp) {
-        console.log(resp);
+        // console.log(resp);
         alert("Could not load models");
-      }); // this.selected = this.brands[1].name;
+      });
+      var data = {
+        brand: this.selected,
+        model: this.selected_m
+      }; // console.log(this.selected);
 
-      console.log('Get models.');
+      this.$emit('CatalogShow', data); //console.log('Get models.');
     },
-    addAuto: function addAuto() {},
-    addModel: function addModel() {}
+    OnChangModel: function OnChangModel(e) {
+      //console.log(e);
+      var app = this; //console.log(app.selected_m);
+
+      var data = {
+        brand: this.selected,
+        model: this.selected_m
+      }; //console.log(this.selected);
+
+      this.$emit('CatalogShow', data);
+    },
+    CatalogShow: function CatalogShow() {
+      var data = {
+        brand: this.selected,
+        model: this.selected_m
+      }; // console.log(this.selected);
+
+      this.$emit('CatalogShow', data);
+    }
   }
 });
 
 function getModelId(id, app) {
   //var app = this;
   axios.get('/api/v1/models/' + id).then(function (resp) {
-    console.log(resp.data[0].id);
     app.models = resp.data;
     app.selected_m = resp.data[0].id; // app.modelselect = true;
+    // console.log(app.selected);
+    //console.log(app.selected_m);
+
+    app.CatalogShow();
   })["catch"](function (resp) {
-    console.log(resp);
+    // console.log(resp);
     alert("Could not load models");
   }); // this.selected = this.brands[1].name;
 
@@ -2119,9 +2145,16 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     'CatalogModel': _CatalogModel_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  props: {
+    brand: "",
+    model: ""
+  },
   name: "home",
   data: function data() {
     return {
+      selected: "",
+      selected_m: "",
+      catalog: 'hide',
       details: [],
       detail: {
         code: "",
@@ -2133,19 +2166,23 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     console.log('Home mounted.');
-    var app = this;
+    var app = this; //console.log(app.selected);
+
     axios.get('/api/v1/details').then(function (resp) {
-      app.details = resp.data;
-      console.log(resp.data);
+      app.details = resp.data; //console.log(resp.data);
     })["catch"](function (resp) {
       console.log(resp);
-      alert("Could not load companies");
+      alert("Could not load details");
     });
   },
   methods: {
+    CatalogShow: function CatalogShow(data) {
+      this.catalog = 'show';
+      console.log('child component said login', data);
+    },
     OnChangDetail: function OnChangDetail(e, i) {
       //console.log(i);
-      console.log(this.details[i]);
+      // console.log(this.details[i]);
       var id = e.target.dataset.id;
       var data = {
         code: this.details[i].code,
@@ -2159,7 +2196,7 @@ __webpack_require__.r(__webpack_exports__);
 });
 
 function saveDetail(id, data) {
-  console.log(data);
+  //console.log(data);
   axios.put('/api/v1/details/' + id, data).then(function (resp) {
     // app.details = resp.data;                  
     console.log(resp.data);
@@ -37960,19 +37997,24 @@ var render = function() {
                       }
                     ],
                     on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.selected_m = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      }
+                      change: [
+                        function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.selected_m = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        },
+                        function($event) {
+                          return _vm.OnChangModel($event)
+                        }
+                      ]
                     }
                   },
                   _vm._l(_vm.models, function(model, j) {
@@ -38046,109 +38088,116 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-sm-12" }, [_c("CatalogModel")], 1)
+      _c(
+        "div",
+        { staticClass: "col-sm-12" },
+        [_c("CatalogModel", { on: { CatalogShow: _vm.CatalogShow } })],
+        1
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-sm-12" }, [
-        _c("div", { staticClass: "box_table" }, [
-          _c("table", { attrs: { border: "1" } }, [
-            _c(
-              "tbody",
-              [
-                _vm._m(1),
-                _vm._v(" "),
-                _vm._l(_vm.details, function(detail, i) {
-                  return _c(
-                    "tr",
-                    {
-                      key: detail.id,
-                      attrs: { "data-id": detail.id },
-                      on: {
-                        change: function($event) {
-                          return _vm.OnChangDetail($event, i)
-                        }
-                      },
-                      model: {
-                        value: _vm.details[i],
-                        callback: function($$v) {
-                          _vm.$set(_vm.details, i, $$v)
+        _vm.catalog == "show"
+          ? _c("div", { staticClass: "box_table" }, [
+              _c("table", { attrs: { border: "1" } }, [
+                _c(
+                  "tbody",
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _vm._l(_vm.details, function(detail, i) {
+                      return _c(
+                        "tr",
+                        {
+                          key: detail.id,
+                          attrs: { "data-id": detail.id },
+                          on: {
+                            change: function($event) {
+                              return _vm.OnChangDetail($event, i)
+                            }
+                          },
+                          model: {
+                            value: _vm.details[i],
+                            callback: function($$v) {
+                              _vm.$set(_vm.details, i, $$v)
+                            },
+                            expression: "details[i]"
+                          }
                         },
-                        expression: "details[i]"
-                      }
-                    },
-                    [
-                      _c("td", { attrs: { width: "12%" } }, [
-                        _c("input", {
-                          attrs: {
-                            type: "text",
-                            name: "code",
-                            "data-id": detail.id
-                          },
-                          domProps: { value: detail.code },
-                          on: {
-                            input: function($event) {
-                              detail.code = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _c("input", {
-                          attrs: {
-                            type: "text",
-                            name: "name",
-                            "data-id": detail.id
-                          },
-                          domProps: { value: detail.name },
-                          on: {
-                            input: function($event) {
-                              detail.name = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { attrs: { width: "12%" } }, [
-                        _c("input", {
-                          attrs: {
-                            type: "text",
-                            name: "price_new",
-                            "data-id": detail.id
-                          },
-                          domProps: { value: detail.price_new },
-                          on: {
-                            input: function($event) {
-                              detail.price_new = $event.target.value
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { attrs: { width: "12%" } }, [
-                        _c("input", {
-                          attrs: {
-                            type: "text",
-                            name: "price_old",
-                            "data-id": detail.id
-                          },
-                          domProps: { value: detail.price_old },
-                          on: {
-                            input: function($event) {
-                              detail.price_old = $event.target.value
-                            }
-                          }
-                        })
-                      ])
-                    ]
-                  )
-                })
-              ],
-              2
-            )
-          ])
-        ])
+                        [
+                          _c("td", { attrs: { width: "12%" } }, [
+                            _c("input", {
+                              attrs: {
+                                type: "text",
+                                name: "code",
+                                "data-id": detail.id
+                              },
+                              domProps: { value: detail.code },
+                              on: {
+                                input: function($event) {
+                                  detail.code = $event.target.value
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c("input", {
+                              attrs: {
+                                type: "text",
+                                name: "name",
+                                "data-id": detail.id
+                              },
+                              domProps: { value: detail.name },
+                              on: {
+                                input: function($event) {
+                                  detail.name = $event.target.value
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { attrs: { width: "12%" } }, [
+                            _c("input", {
+                              attrs: {
+                                type: "text",
+                                name: "price_new",
+                                "data-id": detail.id
+                              },
+                              domProps: { value: detail.price_new },
+                              on: {
+                                input: function($event) {
+                                  detail.price_new = $event.target.value
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { attrs: { width: "12%" } }, [
+                            _c("input", {
+                              attrs: {
+                                type: "text",
+                                name: "price_old",
+                                "data-id": detail.id
+                              },
+                              domProps: { value: detail.price_old },
+                              on: {
+                                input: function($event) {
+                                  detail.price_old = $event.target.value
+                                }
+                              }
+                            })
+                          ])
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ])
+            ])
+          : _vm._e()
       ])
     ])
   ])
@@ -53945,6 +53994,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Home */ "./resources/js/components/Home.vue");
 /* harmony import */ var _components_Price__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Price */ "./resources/js/components/Price.vue");
+/* harmony import */ var _components_CatalogModel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/CatalogModel */ "./resources/js/components/CatalogModel.vue");
+
 
 
 
@@ -53982,8 +54033,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Сайт\OSP\OpenServer\domains\autocatalog\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\Сайт\OSP\OpenServer\domains\autocatalog\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\Программы\OpenServer\domains\autocatalog\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Программы\OpenServer\domains\autocatalog\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -1,6 +1,7 @@
 import VueRouter from 'vue-router';
 import Home from './components/Home';
 import Price from './components/Price';
+import CatalogModel from './components/CatalogModel';
 
 let routes = [
     {
