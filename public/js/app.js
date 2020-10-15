@@ -2001,40 +2001,27 @@ __webpack_require__.r(__webpack_exports__);
       // console.log(e);
       // console.log(this.selected); 
       var id = this.selected;
-      var app = this; //console.log(app.selected);
-
-      axios.get('/api/v1/models/' + id).then(function (resp) {
-        //console.log(resp.data[0].id);
-        app.models = resp.data;
-        app.selected_m = resp.data[0].id; // app.modelselect = true;
-      })["catch"](function (resp) {
-        // console.log(resp);
-        alert("Could not load models");
-      });
-      var data = {
-        brand: this.selected,
-        model: this.selected_m
-      }; // console.log(this.selected);
-
-      this.$emit('CatalogShow', data); //console.log('Get models.');
+      var app = this;
+      console.log(app.selected_m);
+      getModelId(this.selected, app); // this.$emit('CatalogShow',data);
+      //console.log('Get models.');
     },
     OnChangModel: function OnChangModel(e) {
       //console.log(e);
-      var app = this; //console.log(app.selected_m);
-
+      //console.log(app.selected_m);
       var data = {
         brand: this.selected,
         model: this.selected_m
-      }; //console.log(this.selected);
-
+      };
+      console.log(data);
       this.$emit('CatalogShow', data);
     },
     CatalogShow: function CatalogShow() {
       var data = {
         brand: this.selected,
         model: this.selected_m
-      }; // console.log(this.selected);
-
+      };
+      console.log(data);
       this.$emit('CatalogShow', data);
     }
   }
@@ -2145,15 +2132,11 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     'CatalogModel': _CatalogModel_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: {
-    brand: "",
-    model: ""
-  },
   name: "home",
   data: function data() {
     return {
-      selected: "",
-      selected_m: "",
+      brand: "",
+      model: "",
       catalog: 'hide',
       details: [],
       detail: {
@@ -2166,19 +2149,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     console.log('Home mounted.');
-    var app = this; //console.log(app.selected);
-
-    axios.get('/api/v1/details').then(function (resp) {
-      app.details = resp.data; //console.log(resp.data);
-    })["catch"](function (resp) {
-      console.log(resp);
-      alert("Could not load details");
-    });
+    var app = this;
+    console.log(this.brand);
   },
   methods: {
     CatalogShow: function CatalogShow(data) {
+      var app = this;
       this.catalog = 'show';
-      console.log('child component said login', data);
+      this.brand = data.brand;
+      this.model = data.model;
+      console.log(data);
+      getDetails(app);
     },
     OnChangDetail: function OnChangDetail(e, i) {
       //console.log(i);
@@ -2202,6 +2183,18 @@ function saveDetail(id, data) {
     console.log(resp.data);
   })["catch"](function (resp) {
     console.log(resp);
+  });
+}
+
+function getDetails(app) {
+  console.log(app.model);
+  var id = app.model;
+  axios.get('/api/v1/details/' + id).then(function (resp) {
+    console.log(resp.data);
+    app.details = resp.data; //console.log(resp.data);
+  })["catch"](function (resp) {
+    console.log(resp);
+    alert("Could not load details");
   });
 }
 

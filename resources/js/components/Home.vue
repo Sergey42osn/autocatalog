@@ -76,15 +76,11 @@
         components: {
             'CatalogModel': CatalogModel
           },
-          props:{
-            brand: "",
-            model: ""
-          },
         name:"home",
         data() {
             return {
-                selected: "",
-                selected_m: "",
+                brand: "",
+                model: "",
                 catalog: 'hide',
                 details: [],
                 detail: {
@@ -99,24 +95,17 @@
             console.log('Home mounted.');
 
             var app = this;
-            //console.log(app.selected);
 
-            axios.get('/api/v1/details')
-                .then(function (resp) {
-
-                    app.details = resp.data;
-                  
-                    //console.log(resp.data);
-                })
-                .catch(function (resp) {
-                    console.log(resp);
-                    alert("Could not load details");
-                });
+            console.log(this.brand);
         },
         methods:{
             CatalogShow(data){
+                var app = this;
                 this.catalog = 'show';
-                 console.log('child component said login', data);
+                this.brand = data.brand;
+                this.model = data.model;
+                 console.log(data);
+                 getDetails(app);
             },
             OnChangDetail:function(e,i){
                 //console.log(i);
@@ -145,6 +134,23 @@
                 .catch(function (resp) {
                     console.log(resp);
 
+                });
+    }
+    function getDetails(app){
+        console.log(app.model);
+
+        var id = app.model;
+
+        axios.get('/api/v1/details/' +id)
+                .then(function (resp) {
+                    console.log(resp.data)
+                    app.details = resp.data;
+                  
+                    //console.log(resp.data);
+                })
+                .catch(function (resp) {
+                    console.log(resp);
+                    alert("Could not load details");
                 });
     }
 </script>

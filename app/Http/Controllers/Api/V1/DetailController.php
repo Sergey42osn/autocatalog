@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\ModelCar;
 use App\Detail;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -47,7 +48,10 @@ class DetailController extends Controller
      */
     public function show($id)
     {
-        //
+        //dd($id);
+        $details = ModelCar::find($id)->catalog;
+        //dd($models);
+        return $details;
     }
 
     /**

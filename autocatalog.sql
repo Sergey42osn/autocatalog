@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 15 2020 г., 09:38
+-- Время создания: Окт 15 2020 г., 15:04
 -- Версия сервера: 10.3.22-MariaDB
 -- Версия PHP: 7.2.29
 
@@ -50,7 +50,7 @@ INSERT INTO `brands` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `details` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `id_model` int(11) NOT NULL,
+  `model_car_id` int(11) NOT NULL,
   `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price_new` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -63,9 +63,11 @@ CREATE TABLE `details` (
 -- Дамп данных таблицы `details`
 --
 
-INSERT INTO `details` (`id`, `id_model`, `code`, `name`, `price_new`, `price_old`, `created_at`, `updated_at`) VALUES
-(1, 45, 'sxhdfzhjndgf', 'sdxzhbdfgjhndgf', 'sdthnbdfhnjcvgf', 'dzhfnbdfndgf', NULL, NULL),
-(2, 12, 'cgkmh', 'xfykjyghfy', 'fjmngfhjmghf', 'fjmnfghjf', NULL, NULL);
+INSERT INTO `details` (`id`, `model_car_id`, `code`, `name`, `price_new`, `price_old`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Toyota Corolla', 'Бампер тойота', 'sdthnbdfhnjcvgf', 'dzhfnbdfndgf', NULL, '2020-10-15 05:00:37'),
+(2, 2, 'Nissan Almera', 'Стекло лобовое', 'fjmngfhjmghf', 'fjmnfghjf', NULL, '2020-10-15 05:00:19'),
+(3, 3, 'Toyota Passo', 'Бампер тойота Passo', 'sdthnbdfhnjcvgf', 'dzhfnbdfndgf', NULL, '2020-10-15 05:03:16'),
+(4, 4, 'Nissan Sanni', 'Бампер Nissan Sanni', 'sdthnbdfhnjcvgf', 'dzhfnbdfndgf', NULL, '2020-10-15 05:02:56');
 
 -- --------------------------------------------------------
 
@@ -223,7 +225,7 @@ ALTER TABLE `brands`
 -- AUTO_INCREMENT для таблицы `details`
 --
 ALTER TABLE `details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `failed_jobs`

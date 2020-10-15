@@ -70,40 +70,22 @@
             OnChangBrand(e){
                // console.log(e);
               // console.log(this.selected); 
-               let id = this.selected;
+               var id = this.selected;
                var app = this;
-                //console.log(app.selected);
-               axios
-                    .get('/api/v1/models/' + id)
-                    .then(function (resp) {
-                    //console.log(resp.data[0].id);
-                    app.models = resp.data;
-                    app.selected_m = resp.data[0].id;
-                       // app.modelselect = true;
+            console.log(app.selected_m);
 
-                })
-                .catch(function (resp) {
-                   // console.log(resp);
-                    alert("Could not load models");
-                });
-
-                 var data = {
-                    brand: this.selected,
-                    model: this.selected_m
-                };
-               // console.log(this.selected);
-               this.$emit('CatalogShow',data);
+             getModelId(this.selected,app);
+              // this.$emit('CatalogShow',data);
                 //console.log('Get models.');
             },
             OnChangModel(e){
                 //console.log(e);
-                var app = this;
                 //console.log(app.selected_m);
                 var data = {
                     brand: this.selected,
                     model: this.selected_m
                 };
-                //console.log(this.selected);
+                console.log(data);
                this.$emit('CatalogShow',data);
             },
              CatalogShow(){
@@ -111,7 +93,7 @@
                     brand: this.selected,
                     model: this.selected_m
                 };
-               // console.log(this.selected);
+               console.log(data);
                this.$emit('CatalogShow',data); 
             }
          }

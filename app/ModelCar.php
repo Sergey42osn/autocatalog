@@ -12,4 +12,9 @@ class ModelCar extends Model
     {
     	return $this->belongsTo('App\Brand');
     }
+
+    public function catalog()
+    {
+    	return $this->hasMany('App\Detail');
+    }
 }
