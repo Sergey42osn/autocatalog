@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\ModelCar;
+use App\Brand;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -47,7 +48,10 @@ class ModelController extends Controller
      */
     public function show($id)
     {
-        return ModelCar::find($id);
+        //dd($id);
+        $models = Brand::find($id)->models;
+        //dd($models);
+        return $models;
     }
 
     /**

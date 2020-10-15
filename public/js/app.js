@@ -2092,6 +2092,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "addprice",
   data: function data() {
@@ -2106,28 +2107,26 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var app = this;
     axios.get('/api/v1/brands').then(function (resp) {
-      console.log(resp);
-      app.brands = resp.data;
-      console.log(resp.data);
-
-      _OnChangBrand(this.selected, app);
+      //console.log(resp);
+      app.brands = resp.data; //console.log(resp.data);
+      //getModelId(app.brands[0].id,app);
     })["catch"](function (resp) {
       console.log(resp);
       alert("Could not load companies");
-    }); // this.selected = this.brands[1].name;
-
+    });
     console.log('Home mounted.'); //console.log(this.selected);
-    // OnChangBrand(this.selected,app);
+
+    getModelId(this.selected, app); // OnChangBrand(this.selected,app);
   },
   methods: {
     OnChangBrand: function OnChangBrand(e) {
-      //console.log(this.selected); 
-      _OnChangBrand(this.selected, app);
+      console.log(this.selected);
+      getModelId(this.selected, this.app);
     }
   }
 });
 
-function _OnChangBrand(id, app) {
+function OnChangBrand(id, app) {
   console.log(id);
   getModelId(id, app);
 }
@@ -2135,10 +2134,10 @@ function _OnChangBrand(id, app) {
 function getModelId(id, app) {
   //var app = this;
   axios.get('/api/v1/models/' + id).then(function (resp) {
-    console.log(resp); //app.models = resp.data;
+    console.log(resp.data);
+    app.models = resp.data; // app.selected_m = 1;
+    // app.modelselect = true;
 
-    app.selected_m = 1;
-    app.modelselect = true;
     console.log(resp.data);
   })["catch"](function (resp) {
     console.log(resp);
@@ -37984,46 +37983,44 @@ var render = function() {
                 0
               ),
               _vm._v(" "),
-              _vm.modelselect
-                ? _c(
-                    "select",
+              _c(
+                "select",
+                {
+                  directives: [
                     {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.selected_m,
-                          expression: "selected_m"
-                        }
-                      ],
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.selected_m = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        }
-                      }
-                    },
-                    _vm._l(_vm.models, function(model, j) {
-                      return _c("option", { domProps: { value: model.id } }, [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(model.name) +
-                            "\n                          "
-                        )
-                      ])
-                    }),
-                    0
-                  )
-                : _vm._e()
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selected_m,
+                      expression: "selected_m"
+                    }
+                  ],
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selected_m = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                _vm._l(_vm.models, function(model, j) {
+                  return _c("option", { domProps: { value: model.id } }, [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(model.name) +
+                        "\n                          "
+                    )
+                  ])
+                }),
+                0
+              )
             ])
           ])
         ])

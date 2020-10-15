@@ -15,8 +15,9 @@
                                 {{ brand.name }}
                               </option>
                             </select>
-                            <select v-if="modelselect" v-model="selected_m">
-                              <option v-for="model,j in models" v-bind:value="model.id">
+                            <select v-model="selected_m">
+                              <option v-for="model,j in models"
+                                        v-bind:value="model.id">
                                 {{ model.name }}
                               </option>
                             </select>
@@ -44,25 +45,25 @@
             var app = this;
             axios.get('/api/v1/brands')
                 .then(function (resp) {
-                     console.log(resp);
+                     //console.log(resp);
                     app.brands = resp.data;
                   
-                    console.log(resp.data);
-                    OnChangBrand(this.selected,app);
+                    //console.log(resp.data);
+                    //getModelId(app.brands[0].id,app);
                 })
                 .catch(function (resp) {
                     console.log(resp);
                     alert("Could not load companies");
                 });
-               // this.selected = this.brands[1].name;
             console.log('Home mounted.');
             //console.log(this.selected);
+            getModelId(this.selected,app);
             // OnChangBrand(this.selected,app);
         },
         methods:{
             OnChangBrand:function(e){
-               //console.log(this.selected); 
-               OnChangBrand(this.selected,app);
+               console.log(this.selected); 
+               getModelId(this.selected,this.app);
             }
          }
     }
@@ -75,10 +76,10 @@
             axios
             .get('/api/v1/models/' + id)
                 .then(function (resp) {
-                    console.log(resp);
-                    //app.models = resp.data;
-                   app.selected_m = 1;
-                    app.modelselect = true;
+                    console.log(resp.data);
+                    app.models = resp.data;
+                  // app.selected_m = 1;
+                   // app.modelselect = true;
                   
                     console.log(resp.data);
                 })

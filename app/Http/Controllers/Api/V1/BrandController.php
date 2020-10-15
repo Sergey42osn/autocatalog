@@ -15,6 +15,7 @@ class BrandController extends Controller
      */
     public function index()
     {
+           // dd( Brand::all());
          return Brand::all();
     }
 
@@ -47,7 +48,7 @@ class BrandController extends Controller
      */
     public function show($id)
     {
-        //
+       
     }
 
     /**

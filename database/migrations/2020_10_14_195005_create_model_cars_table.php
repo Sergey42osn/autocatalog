@@ -15,7 +15,7 @@ class CreateModelCarsTable extends Migration
     {
         Schema::create('model_cars', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_brand');
+            $table->integer('brand_id');
             $table->string('name');
             $table->timestamps();
         });
